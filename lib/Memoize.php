@@ -4,11 +4,14 @@ trait Memoize {
 	private $memoized = [];
 
 	public function __call($method, $params) {
-		$key = $this->getHash($params);
-		$method = $this->getMethod($method);
-		if ($method === false) {
-			throw new BadMethodCalException();
+		return $this->memoize($this->getMethod($method), $params);
+	}
+
+	public function memoize($method, $params) {
+		if (!method_exists($this, $method)) {
+			throw new BadMethodCallException();
 		}
+		$key = $this->getHash($params);
 		if(!array_key_exists($method, $this->memoized)) {
 			$this->memoized[$method] = [];
 		}
@@ -24,13 +27,8 @@ trait Memoize {
 	}
 
 	private function getMethod($method) {
-		if (!substr($method, 0, 1) == '_') {
-			return null;
-		}
-		$method = substr($method, 1);
-		$exists = method_exists($this, $method);
-		if ($exists) {
-			return $method;
+		if (strpos($method, '_') === 0) {
+			return substr($method, 1);
 		}
 		return null;
 	}

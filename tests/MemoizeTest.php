@@ -21,6 +21,13 @@ class MemoizeTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $c->calls['two']);
 	}
 
+	public function testBadMethodException() {
+		$this->setExpectedException('BadMethodCallException');
+
+		$c = new SimpleCounter();
+		$c->_missingMethod();
+	}
+
 	public function testMemoizeFactorial() {
 		$m = new Math();
 		$m->_factorial(100);
