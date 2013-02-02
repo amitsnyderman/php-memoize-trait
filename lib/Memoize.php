@@ -9,7 +9,7 @@ trait Memoize {
 
 	public function memoize($method, $params) {
 		if (!isset($this->memoizer)) {
-			$this->memoizer = new Memoizer();
+			$this->memoizer = new Memoizer(new InMemoryMemoizerCache());
 		}
 		return $this->memoizer->memoize([$this, $method], $params);
 	}

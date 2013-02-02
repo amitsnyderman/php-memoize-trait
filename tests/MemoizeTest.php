@@ -1,6 +1,7 @@
 <?php
 
 require 'lib/Memoizer.php';
+require 'lib/MemoizerCache.php';
 require 'lib/Memoize.php';
 
 class MemoizeTest extends PHPUnit_Framework_TestCase {

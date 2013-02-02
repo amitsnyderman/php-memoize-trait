@@ -1,18 +1,19 @@
 <?php
 
 class Memoizer {
-	private $memoized = [];
+	private $cache;
+
+	public function __construct(MemoizerCache $cache) {
+		$this->cache = $cache;
+	}
 
 	public function memoize(callable $callback, $params) {
 		$bucket = $this->getMethod($callback);
 		$key = $this->getHash($params);
-		if(!array_key_exists($bucket, $this->memoized)) {
-			$this->memoized[$bucket] = [];
-		}
-		if (array_key_exists($key, $this->memoized[$bucket])) {
-			return $this->memoized[$bucket][$key];
-		}
-		return ($this->memoized[$bucket][$key] = call_user_func_array($callback, $params));
+
+		return $this->cache->get($bucket.$key, function() use ($callback, $params) {
+			return call_user_func_array($callback, $params);
+		});
 	}
 
 	private function getMethod(callable $callback) {
