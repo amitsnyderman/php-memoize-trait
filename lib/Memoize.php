@@ -16,7 +16,6 @@ trait Memoize {
 			$this->memoized[$method] = [];
 		}
 		if (array_key_exists($key, $this->memoized[$method])) {
-			print "using memoize\n";
 			return $this->memoized[$method][$key];
 		}
 		return ($this->memoized[$method][$key] = call_user_func_array(array($this, $method), $params));
