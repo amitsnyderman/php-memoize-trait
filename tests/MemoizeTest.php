@@ -1,5 +1,6 @@
 <?php
 
+require 'lib/Memoizer.php';
 require 'lib/Memoize.php';
 
 class MemoizeTest extends PHPUnit_Framework_TestCase {
@@ -21,8 +22,8 @@ class MemoizeTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $c->calls['two']);
 	}
 
-	public function testBadMethodException() {
-		$this->setExpectedException('BadMethodCallException');
+	public function testBadMethod() {
+		$this->setExpectedException('PHPUnit_Framework_Error');
 
 		$c = new SimpleCounter();
 		$c->_missingMethod();

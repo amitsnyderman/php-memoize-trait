@@ -1,28 +1,17 @@
 <?php
 
 trait Memoize {
-	private $memoized = [];
+	private $memoizer;
 
 	public function __call($method, $params) {
 		return $this->memoize($this->getMethod($method), $params);
 	}
 
 	public function memoize($method, $params) {
-		if (!method_exists($this, $method)) {
-			throw new BadMethodCallException();
+		if (!isset($this->memoizer)) {
+			$this->memoizer = new Memoizer();
 		}
-		$key = $this->getHash($params);
-		if(!array_key_exists($method, $this->memoized)) {
-			$this->memoized[$method] = [];
-		}
-		if (array_key_exists($key, $this->memoized[$method])) {
-			return $this->memoized[$method][$key];
-		}
-		return ($this->memoized[$method][$key] = call_user_func_array(array($this, $method), $params));
-	}
-
-	private function getHash($data) {
-		return md5(serialize(func_get_args()));
+		return $this->memoizer->memoize([$this, $method], $params);
 	}
 
 	private function getMethod($method) {
